@@ -156,6 +156,28 @@ let price=document.getElementById("price").value;
 let phone=document.getElementById("phone").value;
 let region=document.getElementById("region").value;
 
+if(!name || !amount || !price){
+
+alert("Barcha maydonlarni to'ldiring");
+return;
+
+}
+db.collection("products").onSnapshot(snapshot=>{
+
+products=[];
+
+snapshot.forEach(doc=>{
+
+products.push({
+id:doc.id,
+...doc.data()
+});
+
+});
+
+showProducts(products);
+
+});
 db.collection("products").add({
 
 name:name,
@@ -169,6 +191,11 @@ region:region
 alert("Mahsulot qo'shildi");
 
 closeModal();
+
+}).catch(err=>{
+
+console.log(err);
+alert("Xatolik yuz berdi");
 
 });
 
