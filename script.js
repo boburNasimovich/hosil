@@ -1,45 +1,103 @@
 let products = JSON.parse(localStorage.getItem("products")) || [];
 let trucks = JSON.parse(localStorage.getItem("trucks")) || [];
-let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
 
 let currentUser = localStorage.getItem("user") || "";
 
 showProducts(products);
 showTrucks();
-showFavorites();
 showUser();
+
+function openLogin(){
+document.getElementById("loginModal").style.display="flex";
+}
+
+function openRegister(){
+document.getElementById("registerModal").style.display="flex";
+}
+
+function openAdd(){
+document.getElementById("addModal").style.display="flex";
+}
+
+function openAdmin(){
+
+document.getElementById("adminModal").style.display="flex";
+
+let c=document.getElementById("adminProducts");
+
+c.innerHTML="";
+
+products.forEach((p,i)=>{
+
+c.innerHTML+=`
+<div>
+${p.name}
+<button onclick="deleteProduct(${i})">❌</button>
+</div>
+`;
+
+});
+
+}
+
+function closeModal(){
+
+document.querySelectorAll(".modal").forEach(m=>m.style.display="none");
+
+}
 
 function register(){
 
-let u = document.getElementById("username").value;
-let p = document.getElementById("password").value;
+let u=document.getElementById("regUser").value;
+let p=document.getElementById("regPass").value;
 
 localStorage.setItem("user_"+u,p);
 
 alert("Ro'yxatdan o'tdingiz");
 
+closeModal();
+
 }
 
 function login(){
 
-let u = document.getElementById("username").value;
-let p = document.getElementById("password").value;
+let u=document.getElementById("loginUser").value;
+let p=document.getElementById("loginPass").value;
 
-let saved = localStorage.getItem("user_"+u);
+if(u==="admin" && p==="12345"){
 
-if(saved === p){
-
-currentUser = u;
-
-localStorage.setItem("user",u);
-
-showUser();
+currentUser="admin";
 
 }else{
 
-alert("xato login");
+let saved=localStorage.getItem("user_"+u);
+
+if(saved!==p){
+
+alert("login xato");
+return;
 
 }
+
+currentUser=u;
+
+}
+
+localStorage.setItem("user",currentUser);
+
+showUser();
+
+closeModal();
+
+}
+
+function logout(){
+
+localStorage.removeItem("user");
+
+currentUser="";
+
+location.reload();
 
 }
 
@@ -47,7 +105,18 @@ function showUser(){
 
 if(currentUser){
 
-document.getElementById("user").innerText = "👤 "+currentUser;
+document.getElementById("user").innerText="👤 "+currentUser;
+
+document.getElementById("loginBtn").style.display="none";
+document.getElementById("registerBtn").style.display="none";
+
+document.getElementById("logoutBtn").style.display="inline-block";
+
+}
+
+if(currentUser==="admin"){
+
+document.getElementById("adminBtn").style.display="inline-block";
 
 }
 
@@ -55,29 +124,13 @@ document.getElementById("user").innerText = "👤 "+currentUser;
 
 function addProduct(){
 
-let file = document.getElementById("image").files[0];
-
-let reader = new FileReader();
-
-reader.onload = function(){
-
-let product = {
+let product={
 
 name:document.getElementById("name").value,
-
 amount:document.getElementById("amount").value,
-
 price:document.getElementById("price").value,
-
 phone:document.getElementById("phone").value,
-
-region:document.getElementById("region").value,
-
-image:reader.result,
-
-rating:0,
-
-votes:0
+region:document.getElementById("region").value
 
 };
 
@@ -87,25 +140,33 @@ localStorage.setItem("products",JSON.stringify(products));
 
 showProducts(products);
 
+closeModal();
+
 }
 
-if(file) reader.readAsDataURL(file);
+function deleteProduct(i){
+
+products.splice(i,1);
+
+localStorage.setItem("products",JSON.stringify(products));
+
+showProducts(products);
+
+openAdmin();
 
 }
 
 function showProducts(list){
 
-let container = document.getElementById("products");
+let c=document.getElementById("products");
 
-container.innerHTML="";
+c.innerHTML="";
 
-list.forEach((p,i)=>{
+list.forEach(p=>{
 
-container.innerHTML +=`
+c.innerHTML+=`
 
 <div class="product">
-
-<img src="${p.image}">
 
 <h3>${p.name}</h3>
 
@@ -114,12 +175,6 @@ container.innerHTML +=`
 <p>${p.price} so'm/kg</p>
 
 <p>${p.region}</p>
-
-<p>⭐ ${(p.rating/(p.votes||1)).toFixed(1)}</p>
-
-<button onclick="rate(${i},5)">⭐5</button>
-
-<button onclick="favorite(${i})">❤️</button>
 
 <a href="tel:${p.phone}">📞</a>
 
@@ -131,55 +186,18 @@ container.innerHTML +=`
 
 }
 
-function rate(i,val){
-
-products[i].rating += val;
-
-products[i].votes++;
-
-localStorage.setItem("products",JSON.stringify(products));
-
-showProducts(products);
-
-}
-
-function favorite(i){
-
-favorites.push(products[i]);
-
-localStorage.setItem("favorites",JSON.stringify(favorites));
-
-showFavorites();
-
-}
-
-function showFavorites(){
-
-let c = document.getElementById("favorites");
-
-c.innerHTML="";
-
-favorites.forEach(f=>{
-
-c.innerHTML += `<div>${f.name} ❤️</div>`;
-
-});
-
-}
-
 function filterRegion(){
 
-let r = document.getElementById("regionFilter").value;
+let r=document.getElementById("regionFilter").value;
 
 if(!r){
 
 showProducts(products);
-
 return;
 
 }
 
-let filtered = products.filter(p=>p.region===r);
+let filtered=products.filter(p=>p.region===r);
 
 showProducts(filtered);
 
@@ -187,12 +205,10 @@ showProducts(filtered);
 
 function addTruck(){
 
-let t = {
+let t={
 
-from:document.getElementById("truckFrom").value,
-
-to:document.getElementById("truckTo").value,
-
+from:document.getElementById("from").value,
+to:document.getElementById("to").value,
 phone:document.getElementById("truckPhone").value
 
 };
@@ -207,13 +223,13 @@ showTrucks();
 
 function showTrucks(){
 
-let c = document.getElementById("trucks");
+let c=document.getElementById("trucks");
 
 c.innerHTML="";
 
 trucks.forEach(t=>{
 
-c.innerHTML += `
+c.innerHTML+=`
 
 <div class="truck">
 

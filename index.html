@@ -1,10 +1,14 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Hosil Bozor</title>
+
 <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
@@ -13,64 +17,26 @@
 
 <h1>Hosil.uz</h1>
 
-<div id="auth">
+<div class="auth">
 
-<input id="username" placeholder="username">
+<button id="loginBtn" onclick="openLogin()">Login</button>
 
-<input id="password" type="password" placeholder="password">
-
-<button onclick="register()">Register</button>
-
-<button onclick="login()">Login</button>
+<button id="registerBtn" onclick="openRegister()">Register</button>
 
 <span id="user"></span>
+
+<button id="logoutBtn" onclick="logout()" style="display:none">Logout</button>
+
+<button id="adminBtn" onclick="openAdmin()" style="display:none">Admin</button>
 
 </div>
 
 </header>
 
 
-<section class="add-product">
-
-<h2>E'lon joylash</h2>
-
-<input id="name" placeholder="Mahsulot nomi">
-
-<input id="amount" type="number" placeholder="tonna">
-
-<input id="price" type="number" placeholder="so'm/kg">
-
-<input id="phone" placeholder="telefon">
-
-<input type="file" id="image">
-
-<select id="region">
-
-<option value="">Viloyat</option>
-
-<option>Andijon</option>
-<option>Buxoro</option>
-<option>Farg'ona</option>
-<option>Jizzax</option>
-<option>Xorazm</option>
-<option>Namangan</option>
-<option>Navoiy</option>
-<option>Qashqadaryo</option>
-<option>Samarqand</option>
-<option>Sirdaryo</option>
-<option>Surxondaryo</option>
-<option>Toshkent</option>
-
-</select>
-
-<button onclick="addProduct()">Qo'shish</button>
-
-</section>
-
-
 <section>
 
-<h2>Filter</h2>
+<h2>Mahsulotlar</h2>
 
 <select id="regionFilter" onchange="filterRegion()">
 
@@ -91,13 +57,6 @@
 
 </select>
 
-</section>
-
-
-<section>
-
-<h2>Mahsulotlar</h2>
-
 <div id="products"></div>
 
 </section>
@@ -107,26 +66,125 @@
 
 <h2>🚛 Transport</h2>
 
-<input id="truckFrom" placeholder="Qayerdan">
+<div class="transport-add">
 
-<input id="truckTo" placeholder="Qayerga">
+<input id="from" placeholder="Qayerdan">
+
+<input id="to" placeholder="Qayerga">
 
 <input id="truckPhone" placeholder="telefon">
 
 <button onclick="addTruck()">Qo'shish</button>
+
+</div>
 
 <div id="trucks"></div>
 
 </section>
 
 
-<section>
+<button class="fab" onclick="openAdd()">+</button>
 
-<h2>❤️ Sevimlilar</h2>
 
-<div id="favorites"></div>
+<!-- LOGIN -->
 
-</section>
+<div id="loginModal" class="modal">
+
+<div class="modal-content">
+
+<h3>Login</h3>
+
+<input id="loginUser" placeholder="username">
+
+<input id="loginPass" type="password" placeholder="password">
+
+<button onclick="login()">Login</button>
+
+<button onclick="closeModal()">Yopish</button>
+
+</div>
+
+</div>
+
+
+<!-- REGISTER -->
+
+<div id="registerModal" class="modal">
+
+<div class="modal-content">
+
+<h3>Register</h3>
+
+<input id="regUser" placeholder="username">
+
+<input id="regPass" type="password" placeholder="password">
+
+<button onclick="register()">Register</button>
+
+<button onclick="closeModal()">Yopish</button>
+
+</div>
+
+</div>
+
+
+<!-- ADD PRODUCT -->
+
+<div id="addModal" class="modal">
+
+<div class="modal-content">
+
+<h3>E'lon joylash</h3>
+
+<input id="name" placeholder="Mahsulot">
+
+<input id="amount" placeholder="tonna">
+
+<input id="price" placeholder="so'm/kg">
+
+<input id="phone" placeholder="telefon">
+
+<select id="region">
+
+<option>Andijon</option>
+<option>Buxoro</option>
+<option>Farg'ona</option>
+<option>Jizzax</option>
+<option>Xorazm</option>
+<option>Namangan</option>
+<option>Navoiy</option>
+<option>Qashqadaryo</option>
+<option>Samarqand</option>
+<option>Sirdaryo</option>
+<option>Surxondaryo</option>
+<option>Toshkent</option>
+
+</select>
+
+<button onclick="addProduct()">Qo'shish</button>
+
+<button onclick="closeModal()">Yopish</button>
+
+</div>
+
+</div>
+
+
+<!-- ADMIN -->
+
+<div id="adminModal" class="modal">
+
+<div class="modal-content">
+
+<h3>Admin panel</h3>
+
+<div id="adminProducts"></div>
+
+<button onclick="closeModal()">Yopish</button>
+
+</div>
+
+</div>
 
 
 <script src="script.js"></script>
