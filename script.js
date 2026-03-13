@@ -1,3 +1,45 @@
+  const firebaseConfig = {
+    apiKey: "AIzaSyBiJPApf9nzoQtG5ekkYhjLrpOH7gGwE0Q",
+    authDomain: "hosil-57245.firebaseapp.com",
+    projectId: "hosil-57245",
+    storageBucket: "hosil-57245.firebasestorage.app",
+    messagingSenderId: "310834999012",
+    appId: "1:310834999012:web:2acc6cfae4b2b59d5386f1",
+    measurementId: "G-J0P0HCB99Q"
+  };
+
+firebase.initializeApp(firebaseConfig);
+
+const db = firebase.firestore();
+function addProduct(){
+
+let product={
+
+name:document.getElementById("name").value,
+amount:document.getElementById("amount").value,
+price:document.getElementById("price").value,
+phone:document.getElementById("phone").value,
+region:document.getElementById("region").value
+
+};
+
+db.collection("products").add(product);
+
+}
+db.collection("products").onSnapshot(snapshot=>{
+
+let list=[];
+
+snapshot.forEach(doc=>{
+
+list.push(doc.data());
+
+});
+
+showProducts(list);
+
+});
+
 let products = JSON.parse(localStorage.getItem("products")) || [];
 let trucks = JSON.parse(localStorage.getItem("trucks")) || [];
 
@@ -25,7 +67,7 @@ document.getElementById("adminModal").style.display="flex";
 
 let c=document.getElementById("adminProducts");
 
-c.innerHTML="";
+c.innerHTML="<h4>Mahsulotlar</h4>";
 
 products.forEach((p,i)=>{
 
@@ -37,6 +79,31 @@ ${p.name}
 `;
 
 });
+
+c.innerHTML+="<h4>Transport</h4>";
+
+trucks.forEach((t,i)=>{
+
+c.innerHTML+=`
+<div>
+🚛 ${t.from} → ${t.to}
+<button onclick="deleteTruck(${i})">❌</button>
+</div>
+`;
+
+});
+
+}
+
+function deleteTruck(i){
+
+trucks.splice(i,1);
+
+localStorage.setItem("trucks",JSON.stringify(trucks));
+
+showTrucks();
+
+openAdmin();
 
 }
 
