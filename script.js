@@ -1,142 +1,48 @@
-  const firebaseConfig = {
-    apiKey: "AIzaSyBiJPApf9nzoQtG5ekkYhjLrpOH7gGwE0Q",
-    authDomain: "hosil-57245.firebaseapp.com",
-    projectId: "hosil-57245",
-    storageBucket: "hosil-57245.firebasestorage.app",
-    messagingSenderId: "310834999012",
-    appId: "1:310834999012:web:2acc6cfae4b2b59d5386f1",
-    measurementId: "G-J0P0HCB99Q"
-  };
+// LOCAL DATA
 
-firebase.initializeApp(firebaseConfig);
-
-const db = firebase.firestore();
-function addProduct(){
-
-let product={
-
-name:document.getElementById("name").value,
-amount:document.getElementById("amount").value,
-price:document.getElementById("price").value,
-phone:document.getElementById("phone").value,
-region:document.getElementById("region").value
-
-};
-
-db.collection("products").add(product);
-
-}
-db.collection("products").onSnapshot(snapshot=>{
-function addProduct(){
-
-db.collection("products").add({
-
-name:document.getElementById("name").value,
-amount:document.getElementById("amount").value,
-price:document.getElementById("price").value,
-phone:document.getElementById("phone").value,
-region:document.getElementById("region").value
-
-});
-
-}
-db.collection("products").onSnapshot(snapshot=>{
-
-let list=[];
-
-snapshot.forEach(doc=>{
-
-list.push(doc.data());
-
-});
-
-showProducts(list);
-
-});
-let list=[];
-
-snapshot.forEach(doc=>{
-
-list.push(doc.data());
-
-});
-
-showProducts(list);
-
-});
-
-let products = JSON.parse(localStorage.getItem("products")) || [];
+let products = [];
 let trucks = JSON.parse(localStorage.getItem("trucks")) || [];
 
 let currentUser = localStorage.getItem("user") || "";
 
+
+// FIREBASE
+
+const firebaseConfig = {
+apiKey: "AIzaSyBiJPApf9nzoQtG5ekkYhjLrpOH7gGwE0Q",
+authDomain: "hosil-57245.firebaseapp.com",
+projectId: "hosil-57245",
+storageBucket: "hosil-57245.firebasestorage.app",
+messagingSenderId: "310834999012",
+appId: "1:310834999012:web:2acc6cfae4b2b59d5386f1"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const db = firebase.firestore();
+
+
+// REAL TIME PRODUCTS
+
+db.collection("products").onSnapshot(snapshot=>{
+
+products = [];
+
+snapshot.forEach(doc=>{
+
+products.push({
+id:doc.id,
+...doc.data()
+});
+
+});
+
 showProducts(products);
-showTrucks();
-showUser();
-
-function openLogin(){
-document.getElementById("loginModal").style.display="flex";
-}
-
-function openRegister(){
-document.getElementById("registerModal").style.display="flex";
-}
-
-function openAdd(){
-document.getElementById("addModal").style.display="flex";
-}
-
-function openAdmin(){
-
-document.getElementById("adminModal").style.display="flex";
-
-let c=document.getElementById("adminProducts");
-
-c.innerHTML="<h4>Mahsulotlar</h4>";
-
-products.forEach((p,i)=>{
-
-c.innerHTML+=`
-<div>
-${p.name}
-<button onclick="deleteProduct(${i})">❌</button>
-</div>
-`;
 
 });
 
-c.innerHTML+="<h4>Transport</h4>";
 
-trucks.forEach((t,i)=>{
-
-c.innerHTML+=`
-<div>
-🚛 ${t.from} → ${t.to}
-<button onclick="deleteTruck(${i})">❌</button>
-</div>
-`;
-
-});
-
-}
-
-function deleteTruck(i){
-
-trucks.splice(i,1);
-
-localStorage.setItem("trucks",JSON.stringify(trucks));
-
-showTrucks();
-
-openAdmin();
-
-}
-
-function closeModal(){
-
-document.querySelectorAll(".modal").forEach(m=>m.style.display="none");
-
-}
+// AUTH
 
 function register(){
 
@@ -187,8 +93,6 @@ function logout(){
 
 localStorage.removeItem("user");
 
-currentUser="";
-
 location.reload();
 
 }
@@ -214,39 +118,110 @@ document.getElementById("adminBtn").style.display="inline-block";
 
 }
 
+
+// MODALS
+
+function openLogin(){
+
+document.getElementById("loginModal").style.display="flex";
+
+}
+
+function openRegister(){
+
+document.getElementById("registerModal").style.display="flex";
+
+}
+
+function openAdd(){
+
+document.getElementById("addModal").style.display="flex";
+
+}
+
+function closeModal(){
+
+document.querySelectorAll(".modal").forEach(m=>m.style.display="none");
+
+}
+
+
+// PRODUCT ADD
+
 function addProduct(){
 
-let product={
+let name=document.getElementById("name").value;
+let amount=document.getElementById("amount").value;
+let price=document.getElementById("price").value;
+let phone=document.getElementById("phone").value;
+let region=document.getElementById("region").value;
 
-name:document.getElementById("name").value,
-amount:document.getElementById("amount").value,
-price:document.getElementById("price").value,
-phone:document.getElementById("phone").value,
-region:document.getElementById("region").value
+db.collection("products").add({
 
-};
+name:name,
+amount:amount,
+price:price,
+phone:phone,
+region:region
 
-products.push(product);
+}).then(()=>{
 
-localStorage.setItem("products",JSON.stringify(products));
-
-showProducts(products);
+alert("Mahsulot qo'shildi");
 
 closeModal();
 
-}
-
-function deleteProduct(i){
-
-products.splice(i,1);
-
-localStorage.setItem("products",JSON.stringify(products));
-
-showProducts(products);
-
-openAdmin();
+});
 
 }
+
+
+// DELETE PRODUCT (ADMIN)
+
+function deleteProduct(id){
+
+db.collection("products").doc(id).delete();
+
+}
+
+
+// ADMIN PANEL
+
+function openAdmin(){
+
+document.getElementById("adminModal").style.display="flex";
+
+let c=document.getElementById("adminProducts");
+
+c.innerHTML="<h4>Mahsulotlar</h4>";
+
+products.forEach(p=>{
+
+c.innerHTML+=`
+<div>
+${p.name}
+<button onclick="deleteProduct('${p.id}')">❌</button>
+</div>
+`;
+
+});
+
+c.innerHTML+="<h4>Transport</h4>";
+
+trucks.forEach((t,i)=>{
+
+c.innerHTML+=`
+<div>
+🚛 ${t.from} → ${t.to}
+<button onclick="deleteTruck(${i})">❌</button>
+</div>
+`;
+
+});
+
+}
+
+
+// SHOW PRODUCTS
 
 function showProducts(list){
 
@@ -278,6 +253,9 @@ c.innerHTML+=`
 
 }
 
+
+// FILTER REGION
+
 function filterRegion(){
 
 let r=document.getElementById("regionFilter").value;
@@ -295,6 +273,9 @@ showProducts(filtered);
 
 }
 
+
+// TRANSPORT
+
 function addTruck(){
 
 let t={
@@ -310,6 +291,18 @@ trucks.push(t);
 localStorage.setItem("trucks",JSON.stringify(trucks));
 
 showTrucks();
+
+}
+
+function deleteTruck(i){
+
+trucks.splice(i,1);
+
+localStorage.setItem("trucks",JSON.stringify(trucks));
+
+showTrucks();
+
+openAdmin();
 
 }
 
@@ -336,3 +329,9 @@ c.innerHTML+=`
 });
 
 }
+
+
+// INIT
+
+showUser();
+showTrucks();
