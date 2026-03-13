@@ -18,7 +18,7 @@ appId: "1:310834999012:web:2acc6cfae4b2b59d5386f1"
 };
 
 firebase.initializeApp(firebaseConfig);
-const storage = firebase.storage();
+
 const db = firebase.firestore();
 
 
@@ -156,27 +156,35 @@ let price=document.getElementById("price").value;
 let phone=document.getElementById("phone").value;
 let region=document.getElementById("region").value;
 
-let file=document.getElementById("image").files[0];
+if(!name || !amount || !price){
 
-if(!file){
-alert("Rasm tanlang");
+alert("Barcha maydonlarni to'ldiring");
 return;
+
 }
+db.collection("products").onSnapshot(snapshot=>{
 
-let storageRef=storage.ref("products/"+Date.now()+file.name);
+products=[];
 
-storageRef.put(file).then(snapshot=>{
+snapshot.forEach(doc=>{
 
-snapshot.ref.getDownloadURL().then(url=>{
+products.push({
+id:doc.id,
+...doc.data()
+});
 
+});
+
+showProducts(products);
+
+});
 db.collection("products").add({
 
 name:name,
 amount:amount,
 price:price,
 phone:phone,
-region:region,
-image:url
+region:region
 
 }).then(()=>{
 
@@ -184,9 +192,10 @@ alert("Mahsulot qo'shildi");
 
 closeModal();
 
-});
+}).catch(err=>{
 
-});
+console.log(err);
+alert("Xatolik yuz berdi");
 
 });
 
@@ -252,8 +261,6 @@ list.forEach(p=>{
 c.innerHTML+=`
 
 <div class="product">
-
-<img src="${p.image}" style="width:100%;height:150px;object-fit:cover">
 
 <h3>${p.name}</h3>
 
