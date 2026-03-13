@@ -27,7 +27,32 @@ db.collection("products").add(product);
 
 }
 db.collection("products").onSnapshot(snapshot=>{
+function addProduct(){
 
+db.collection("products").add({
+
+name:document.getElementById("name").value,
+amount:document.getElementById("amount").value,
+price:document.getElementById("price").value,
+phone:document.getElementById("phone").value,
+region:document.getElementById("region").value
+
+});
+
+}
+db.collection("products").onSnapshot(snapshot=>{
+
+let list=[];
+
+snapshot.forEach(doc=>{
+
+list.push(doc.data());
+
+});
+
+showProducts(list);
+
+});
 let list=[];
 
 snapshot.forEach(doc=>{
