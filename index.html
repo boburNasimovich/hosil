@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hosil Bozor</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+
+<h1>Hosil.uz</h1>
+
+<div id="auth">
+
+<input id="username" placeholder="username">
+
+<input id="password" type="password" placeholder="password">
+
+<button onclick="register()">Register</button>
+
+<button onclick="login()">Login</button>
+
+<span id="user"></span>
+
+</div>
+
+</header>
+
+
+<section class="add-product">
+
+<h2>E'lon joylash</h2>
+
+<input id="name" placeholder="Mahsulot nomi">
+
+<input id="amount" type="number" placeholder="tonna">
+
+<input id="price" type="number" placeholder="so'm/kg">
+
+<input id="phone" placeholder="telefon">
+
+<input type="file" id="image">
+
+<select id="region">
+
+<option value="">Viloyat</option>
+
+<option>Andijon</option>
+<option>Buxoro</option>
+<option>Farg'ona</option>
+<option>Jizzax</option>
+<option>Xorazm</option>
+<option>Namangan</option>
+<option>Navoiy</option>
+<option>Qashqadaryo</option>
+<option>Samarqand</option>
+<option>Sirdaryo</option>
+<option>Surxondaryo</option>
+<option>Toshkent</option>
+
+</select>
+
+<button onclick="addProduct()">Qo'shish</button>
+
+</section>
+
+
+<section>
+
+<h2>Filter</h2>
+
+<select id="regionFilter" onchange="filterRegion()">
+
+<option value="">Barcha viloyat</option>
+
+<option>Andijon</option>
+<option>Buxoro</option>
+<option>Farg'ona</option>
+<option>Jizzax</option>
+<option>Xorazm</option>
+<option>Namangan</option>
+<option>Navoiy</option>
+<option>Qashqadaryo</option>
+<option>Samarqand</option>
+<option>Sirdaryo</option>
+<option>Surxondaryo</option>
+<option>Toshkent</option>
+
+</select>
+
+</section>
+
+
+<section>
+
+<h2>Mahsulotlar</h2>
+
+<div id="products"></div>
+
+</section>
+
+
+<section>
+
+<h2>🚛 Transport</h2>
+
+<input id="truckFrom" placeholder="Qayerdan">
+
+<input id="truckTo" placeholder="Qayerga">
+
+<input id="truckPhone" placeholder="telefon">
+
+<button onclick="addTruck()">Qo'shish</button>
+
+<div id="trucks"></div>
+
+</section>
+
+
+<section>
+
+<h2>❤️ Sevimlilar</h2>
+
+<div id="favorites"></div>
+
+</section>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
