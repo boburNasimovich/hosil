@@ -1,194 +1,233 @@
 <!DOCTYPE html>
 <html lang="uz">
+
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Hosil Bozor</title>
+    <title>Hosil Bozor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
 
-<link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
 
 </head>
 
 <body>
 
-<header>
+    <header class="navbar">
 
-<h1>Hosil.uz</h1>
+        <div class="logo">
+            <i class="fa-solid fa-leaf"></i> Hosil.uz
+        </div>
+       
+        <div class="search-box">
 
-<div class="auth">
+            <input id="searchInput" placeholder="Mahsulot qidirish...">
 
-<button id="loginBtn" onclick="openLogin()">Login</button>
+            <button onclick="searchProduct()">
+                <i class="fa-solid fa-search"></i>
+            </button>
 
-<button id="registerBtn" onclick="openRegister()">Register</button>
+        </div>
+ <div class="auth">
 
-<span id="user"></span>
+            <button id="loginBtn" onclick="openLogin()">
+                <i class="fa-solid fa-right-to-bracket"></i> Login
+            </button>
 
-<button id="logoutBtn" onclick="logout()" style="display:none">Logout</button>
+            <button id="registerBtn" onclick="openRegister()">
+                <i class="fa-solid fa-user-plus"></i> Register
+            </button>
 
-<button id="adminBtn" onclick="openAdmin()" style="display:none">Admin</button>
+            <span id="user" style="color: #2e8b57;"></span>
 
-</div>
+            <button id="logoutBtn" onclick="logout()" style="display:none">
+                <i class="fa-solid fa-right-from-bracket"></i>
+            </button>
 
-</header>
+            <button id="adminBtn" onclick="openAdmin()" style="display:none">
+                <i class="fa-solid fa-gear"></i>
+            </button>
 
+        </div>
 
-<section>
 
-<h2>Mahsulotlar</h2>
+    </header>
+    <div class="categories">
 
-<select id="regionFilter" onchange="filterRegion()">
+        <button onclick="filterCategory('Kartoshka')">Kartoshka</button>
 
-<option value="">Barcha viloyat</option>
+        <button onclick="filterCategory('Piyoz')">Piyoz</button>
 
-<option>Andijon</option>
-<option>Buxoro</option>
-<option>Farg'ona</option>
-<option>Jizzax</option>
-<option>Xorazm</option>
-<option>Namangan</option>
-<option>Navoiy</option>
-<option>Qashqadaryo</option>
-<option>Samarqand</option>
-<option>Sirdaryo</option>
-<option>Surxondaryo</option>
-<option>Toshkent</option>
+        <button onclick="filterCategory('Sabzi')">Sabzi</button>
 
-</select>
+        <button onclick="filterCategory('Karam')">Karam</button>
 
-<div id="products"></div>
+        <button onclick="filterCategory('')">Barchasi</button>
 
-</section>
+    </div>
 
+    <section>
 
-<section>
+        <h2>Mahsulotlar</h2>
 
-<h2>🚛 Transport</h2>
+        <select id="regionFilter" onchange="filterRegion()">
 
-<div class="transport-add">
+            <option value="">Barcha viloyat</option>
 
-<input id="from" placeholder="Qayerdan">
+            <option>Andijon</option>
+            <option>Buxoro</option>
+            <option>Farg'ona</option>
+            <option>Jizzax</option>
+            <option>Xorazm</option>
+            <option>Namangan</option>
+            <option>Navoiy</option>
+            <option>Qashqadaryo</option>
+            <option>Samarqand</option>
+            <option>Sirdaryo</option>
+            <option>Surxondaryo</option>
+            <option>Toshkent</option>
 
-<input id="to" placeholder="Qayerga">
+        </select>
 
-<input id="truckPhone" placeholder="telefon">
+        <div id="products"></div>
 
-<button onclick="addTruck()">Qo'shish</button>
+    </section>
 
-</div>
 
-<div id="trucks"></div>
+    <section>
 
-</section>
+        <h2><i class="fa-solid fa-truck"></i> Transport</h2>
 
+        <div class="transport-add">
 
-<button class="fab" onclick="openAdd()">+</button>
+            <input id="from" placeholder="Qayerdan">
 
+            <input id="to" placeholder="Qayerga">
 
-<!-- LOGIN -->
+            <input id="truckPhone" placeholder="telefon">
 
-<div id="loginModal" class="modal">
+            <button onclick="addTruck()">Qo'shish</button>
 
-<div class="modal-content">
+        </div>
 
-<h3>Login</h3>
+        <div id="trucks"></div>
 
-<input id="loginUser" placeholder="username">
+    </section>
 
-<input id="loginPass" type="password" placeholder="password">
 
-<button onclick="login()">Login</button>
+    <button class="fab" onclick="openAdd()">+</button>
 
-<button onclick="closeModal()">Yopish</button>
 
-</div>
+    <!-- LOGIN -->
 
-</div>
+    <div id="loginModal" class="modal">
 
+        <div class="modal-content">
 
-<!-- REGISTER -->
+            <h3>Login</h3>
 
-<div id="registerModal" class="modal">
+            <input id="loginUser" placeholder="username">
 
-<div class="modal-content">
+            <input id="loginPass" type="password" placeholder="password">
 
-<h3>Register</h3>
+            <button onclick="login()">Login</button>
 
-<input id="regUser" placeholder="username">
+            <button onclick="closeModal()">Yopish</button>
 
-<input id="regPass" type="password" placeholder="password">
+        </div>
 
-<button onclick="register()">Register</button>
+    </div>
 
-<button onclick="closeModal()">Yopish</button>
 
-</div>
+    <!-- REGISTER -->
 
-</div>
+    <div id="registerModal" class="modal">
 
+        <div class="modal-content">
 
-<!-- ADD PRODUCT -->
+            <h3>Register</h3>
 
-<div id="addModal" class="modal">
+            <input id="regUser" placeholder="username">
 
-<div class="modal-content">
+            <input id="regPass" type="password" placeholder="password">
 
-<h3>E'lon joylash</h3>
+            <button onclick="register()">Register</button>
 
-<input id="name" placeholder="Mahsulot">
+            <button onclick="closeModal()">Yopish</button>
 
-<input id="amount" placeholder="tonna">
+        </div>
 
-<input id="price" placeholder="so'm/kg">
+    </div>
 
-<input id="phone" placeholder="telefon">
 
-<select id="region">
+    <!-- ADD PRODUCT -->
 
-<option>Andijon</option>
-<option>Buxoro</option>
-<option>Farg'ona</option>
-<option>Jizzax</option>
-<option>Xorazm</option>
-<option>Namangan</option>
-<option>Navoiy</option>
-<option>Qashqadaryo</option>
-<option>Samarqand</option>
-<option>Sirdaryo</option>
-<option>Surxondaryo</option>
-<option>Toshkent</option>
+    <div id="addModal" class="modal">
 
-</select>
+        <div class="modal-content">
 
-<button onclick="addProduct()">Qo'shish</button>
+            <h3>E'lon joylash</h3>
 
-<button onclick="closeModal()">Yopish</button>
+            <input id="name" placeholder="Mahsulot">
 
-</div>
+            <input id="amount" placeholder="tonna">
 
-</div>
+            <input id="price" placeholder="so'm/kg">
 
+            <input id="phone" placeholder="telefon">
 
-<!-- ADMIN -->
+            <select id="region">
 
-<div id="adminModal" class="modal">
+                <option>Andijon</option>
+                <option>Buxoro</option>
+                <option>Farg'ona</option>
+                <option>Jizzax</option>
+                <option>Xorazm</option>
+                <option>Namangan</option>
+                <option>Navoiy</option>
+                <option>Qashqadaryo</option>
+                <option>Samarqand</option>
+                <option>Sirdaryo</option>
+                <option>Surxondaryo</option>
+                <option>Toshkent</option>
 
-<div class="modal-content">
+            </select>
 
-<h3>Admin panel</h3>
+            <button onclick="addProduct()">Qo'shish</button>
 
-<div id="adminProducts"></div>
+            <button onclick="closeModal()">Yopish</button>
 
-<button onclick="closeModal()">Yopish</button>
+        </div>
 
-</div>
+    </div>
 
-</div>
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
 
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+    <!-- ADMIN -->
 
-<script src="script.js"></script>
+    <div id="adminModal" class="modal">
+
+        <div class="modal-content">
+
+            <h3>Admin panel</h3>
+
+            <div id="adminProducts"></div>
+
+            <button onclick="closeModal()">Yopish</button>
+
+        </div>
+
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+
+    <script src="script.js"></script>
 </body>
+
 </html>

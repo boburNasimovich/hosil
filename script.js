@@ -2,17 +2,16 @@
 
 let products = [];
 let trucks = JSON.parse(localStorage.getItem("trucks")) || [];
-
 let currentUser = localStorage.getItem("user") || "";
 
 
-// FIREBASE
+// FIREBASE CONFIG
 
 const firebaseConfig = {
 apiKey: "AIzaSyBiJPApf9nzoQtG5ekkYhjLrpOH7gGwE0Q",
 authDomain: "hosil-57245.firebaseapp.com",
 projectId: "hosil-57245",
-storageBucket: "hosil-57245.firebasestorage.app",
+storageBucket: "hosil-57245.appspot.com",
 messagingSenderId: "310834999012",
 appId: "1:310834999012:web:2acc6cfae4b2b59d5386f1"
 };
@@ -20,7 +19,6 @@ appId: "1:310834999012:web:2acc6cfae4b2b59d5386f1"
 firebase.initializeApp(firebaseConfig);
 
 const db = firebase.firestore();
-
 
 // REAL TIME PRODUCTS
 
@@ -63,18 +61,14 @@ let u=document.getElementById("loginUser").value;
 let p=document.getElementById("loginPass").value;
 
 if(u==="admin" && p==="12345"){
-
 currentUser="admin";
-
 }else{
 
 let saved=localStorage.getItem("user_"+u);
 
 if(saved!==p){
-
-alert("login xato");
+alert("Login xato");
 return;
-
 }
 
 currentUser=u;
@@ -84,7 +78,6 @@ currentUser=u;
 localStorage.setItem("user",currentUser);
 
 showUser();
-
 closeModal();
 
 }
@@ -92,7 +85,6 @@ closeModal();
 function logout(){
 
 localStorage.removeItem("user");
-
 location.reload();
 
 }
@@ -101,7 +93,7 @@ function showUser(){
 
 if(currentUser){
 
-document.getElementById("user").innerText="👤 "+currentUser;
+document.getElementById("user").innerHTML='<i class="fa-solid fa-user"></i> '+currentUser;
 
 document.getElementById("loginBtn").style.display="none";
 document.getElementById("registerBtn").style.display="none";
@@ -111,9 +103,7 @@ document.getElementById("logoutBtn").style.display="inline-block";
 }
 
 if(currentUser==="admin"){
-
 document.getElementById("adminBtn").style.display="inline-block";
-
 }
 
 }
@@ -122,39 +112,35 @@ document.getElementById("adminBtn").style.display="inline-block";
 // MODALS
 
 function openLogin(){
-
 document.getElementById("loginModal").style.display="flex";
-
 }
 
 function openRegister(){
-
 document.getElementById("registerModal").style.display="flex";
-
 }
 
 function openAdd(){
-
 document.getElementById("addModal").style.display="flex";
-
 }
 
 function closeModal(){
-
 document.querySelectorAll(".modal").forEach(m=>m.style.display="none");
-
 }
 
 
-// PRODUCT ADD
+// PRODUCT ADD WITH IMAGE
 
 function addProduct(){
 
-let name=document.getElementById("name").value;
+let name=capitalize(normalizeText(document.getElementById("name").value));
+
 let amount=document.getElementById("amount").value;
+
 let price=document.getElementById("price").value;
-let phone=document.getElementById("phone").value;
-let region=document.getElementById("region").value;
+
+let phone=formatPhone(document.getElementById("phone").value);
+
+let region=capitalize(normalizeText(document.getElementById("region").value));
 
 if(!name || !amount || !price){
 
@@ -162,22 +148,7 @@ alert("Barcha maydonlarni to'ldiring");
 return;
 
 }
-db.collection("products").onSnapshot(snapshot=>{
 
-products=[];
-
-snapshot.forEach(doc=>{
-
-products.push({
-id:doc.id,
-...doc.data()
-});
-
-});
-
-showProducts(products);
-
-});
 db.collection("products").add({
 
 name:name,
@@ -192,22 +163,15 @@ alert("Mahsulot qo'shildi");
 
 closeModal();
 
-}).catch(err=>{
-
-console.log(err);
-alert("Xatolik yuz berdi");
-
 });
 
 }
 
 
-// DELETE PRODUCT (ADMIN)
+// DELETE PRODUCT
 
 function deleteProduct(id){
-
 db.collection("products").doc(id).delete();
-
 }
 
 
@@ -238,7 +202,7 @@ trucks.forEach((t,i)=>{
 
 c.innerHTML+=`
 <div>
-🚛 ${t.from} → ${t.to}
+<i class="fa-solid fa-truck"></i> ${t.from} → ${t.to}
 <button onclick="deleteTruck(${i})">❌</button>
 </div>
 `;
@@ -270,8 +234,7 @@ c.innerHTML+=`
 
 <p>${p.region}</p>
 
-<a href="tel:${p.phone}">📞</a>
-
+<a href="tel:${p.phone}"><i class="fa-solid fa-phone"> Bog'lanish</i></a>
 </div>
 
 `;
@@ -280,12 +243,11 @@ c.innerHTML+=`
 
 }
 
-
 // FILTER REGION
 
 function filterRegion(){
 
-let r=document.getElementById("regionFilter").value;
+let r=normalizeText(document.getElementById("regionFilter").value);
 
 if(!r){
 
@@ -294,23 +256,46 @@ return;
 
 }
 
-let filtered=products.filter(p=>p.region===r);
+let filtered=products.filter(p=>normalizeText(p.region)===r);
 
 showProducts(filtered);
 
 }
 
+function normalizeText(text){
 
+return text
+.trim()
+.toLowerCase()
+.replace(/\s+/g," ");
+
+}
+function capitalize(text){
+
+return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+
+}
+function formatPhone(phone){
+
+phone = phone.replace(/\D/g,"");
+
+if(phone.startsWith("998")==false){
+
+phone="998"+phone;
+
+}
+
+return phone;
+
+}
 // TRANSPORT
 
 function addTruck(){
 
 let t={
-
 from:document.getElementById("from").value,
 to:document.getElementById("to").value,
 phone:document.getElementById("truckPhone").value
-
 };
 
 trucks.push(t);
@@ -328,7 +313,6 @@ trucks.splice(i,1);
 localStorage.setItem("trucks",JSON.stringify(trucks));
 
 showTrucks();
-
 openAdmin();
 
 }
@@ -336,7 +320,6 @@ openAdmin();
 function showTrucks(){
 
 let c=document.getElementById("trucks");
-
 c.innerHTML="";
 
 trucks.forEach(t=>{
@@ -345,9 +328,8 @@ c.innerHTML+=`
 
 <div class="truck">
 
-🚛 ${t.from} → ${t.to}
-
-<a href="tel:${t.phone}">📞</a>
+<i class="fa-solid fa-truck"></i> ${t.from} → ${t.to}
+<a href="tel:${t.phone}"><i class="fa-solid fa-phone"></i> Bog'lanish</a>
 
 </div>
 
@@ -356,8 +338,66 @@ c.innerHTML+=`
 });
 
 }
+function calculatePriceStats(){
 
+let stats = {};
 
+products.forEach(p=>{
+
+if(!stats[p.name]){
+
+stats[p.name]={
+total:0,
+count:0
+};
+
+}
+
+stats[p.name].total += Number(p.price);
+stats[p.name].count++;
+
+});
+
+let html="";
+
+for(let name in stats){
+
+let avg = Math.round(stats[name].total / stats[name].count);
+
+html += `
+<div class="priceStat">
+${name} o'rtacha narxi: <b>${avg} so'm</b>
+</div>
+`;
+
+}
+
+document.getElementById("priceStats").innerHTML = html;
+
+}
+function searchProduct(){
+
+let text=document.getElementById("searchInput").value.toLowerCase();
+
+let filtered=products.filter(p=>
+p.name.toLowerCase().includes(text)
+);
+
+showProducts(filtered);
+
+}
+function filterCategory(cat){
+
+if(!cat){
+showProducts(products);
+return;
+}
+
+let filtered=products.filter(p=>p.name===cat);
+
+showProducts(filtered);
+
+}
 // INIT
 
 showUser();
