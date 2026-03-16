@@ -1,31 +1,21 @@
 <!DOCTYPE html>
 <html lang="uz">
-
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Hosil Bozor</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
      <link rel="icon" href="img/hosillogo.png" type="image/x-icon">
     <link rel="stylesheet" href="style.css">
-
 </head>
-
 <body>
-
     <header class="navbar">
-
         <div class="logo">
             <i class="fa-solid fa-leaf"></i> Hosil.uz
         </div>
-
         <div class="search-box">
 
             <input id="searchInput" placeholder="Mahsulot qidirish...">
@@ -36,51 +26,32 @@
 
         </div>
         <div class="auth">
-
             <button id="loginBtn" onclick="openLogin()">
                 <i class="fa-solid fa-right-to-bracket"></i> Login
             </button>
-
             <button id="registerBtn" onclick="openRegister()">
                 <i class="fa-solid fa-user-plus"></i> Register
             </button>
-
             <span id="user" style="color: #2e8b57;"></span>
-
             <button id="logoutBtn" onclick="logout()" style="display:none">
                 <i class="fa-solid fa-right-from-bracket"></i>
             </button>
-
             <button id="adminBtn" onclick="openAdmin()" style="display:none">
                 <i class="fa-solid fa-gear"></i>
             </button>
-
         </div>
-
-
     </header>
     <div class="categories">
-
         <button onclick="filterCategory('Kartoshka')">Kartoshka</button>
-
         <button onclick="filterCategory('Piyoz')">Piyoz</button>
-
         <button onclick="filterCategory('Sabzi')">Sabzi</button>
-
         <button onclick="filterCategory('Karam')">Karam</button>
-
         <button onclick="filterCategory('')">Barchasi</button>
-
     </div>
-
     <section>
-
         <h2>Mahsulotlar</h2>
-
         <select id="regionFilter" onchange="filterRegion()">
-
             <option value="">Barcha viloyat</option>
-
             <option>Andijon</option>
             <option>Buxoro</option>
             <option>Farg'ona</option>
@@ -93,98 +64,49 @@
             <option>Sirdaryo</option>
             <option>Surxondaryo</option>
             <option>Toshkent</option>
-
         </select>
-
         <div id="products"></div>
-
     </section>
-
-
     <section>
-
         <h2><i class="fa-solid fa-truck"></i> Transport</h2>
-
         <div class="transport-add">
-
             <input id="from" placeholder="Qayerdan">
-
             <input id="to" placeholder="Qayerga">
-
             <input id="truckPhone" placeholder="telefon">
-
             <button onclick="addTruck()">Qo'shish</button>
-
         </div>
-
         <div id="trucks"></div>
-
     </section>
-
-
     <button class="fab" onclick="openAdd()">+</button>
-
-
     <!-- LOGIN -->
-
     <div id="loginModal" class="modal">
-
         <div class="modal-content">
-
             <h3>Login</h3>
-
             <input id="loginUser" placeholder="username">
-
             <input id="loginPass" type="password" placeholder="password">
-
             <button onclick="login()">Login</button>
-
             <button onclick="closeModal()">Yopish</button>
-
         </div>
-
     </div>
-
-
     <!-- REGISTER -->
-
     <div id="registerModal" class="modal">
-
         <div class="modal-content">
-
             <h3>Register</h3>
-
             <input id="regUser" placeholder="username">
-
             <input id="regPass" type="password" placeholder="password">
-
             <button onclick="register()">Register</button>
-
             <button onclick="closeModal()">Yopish</button>
-
         </div>
-
     </div>
-
-
     <!-- ADD PRODUCT -->
-
     <div id="addModal" class="modal">
-
         <div class="modal-content">
-
             <h3>E'lon joylash</h3>
-
             <input id="name" placeholder="Mahsulot">
-
             <input id="amount" placeholder="tonna">
-
             <input id="price" placeholder="so'm/kg">
-
             <input id="phone" placeholder="telefon">
-
             <select id="region">
-
                 <option>Andijon</option>
                 <option>Buxoro</option>
                 <option>Farg'ona</option>
@@ -197,114 +119,57 @@
                 <option>Sirdaryo</option>
                 <option>Surxondaryo</option>
                 <option>Toshkent</option>
-
             </select>
-
             <button onclick="addProduct()">Qo'shish</button>
-
             <button onclick="closeModal()">Yopish</button>
-
         </div>
-
     </div>
-
-
     <!-- ADMIN -->
-
     <div id="adminModal" class="modal">
-
         <div class="modal-content">
-
             <h3>Admin panel</h3>
-
             <div id="adminProducts"></div>
-
             <button onclick="closeModal()">Yopish</button>
-
         </div>
-
     </div>
     <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
-
     <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
-
     <script src="script.js"></script>
 </body>
 <footer class="footer">
-
     <div class="footer-container">
-
         <div class="footer-section">
-
             <h3>Hosil.uz</h3>
-
-            <p>
-                Fermerlar, xaridorlar va logistika uchun yagona platforma.
-            </p>
-
+            <p>Fermerlar, xaridorlar va logistika uchun yagona platforma. </p>
         </div>
-
-
         <div class="footer-section">
-
             <h4>Quick Links</h4>
-
             <ul>
-
                 <li><a href="#">Mahsulotlar</a></li>
-
                 <li><a href="#">Transport</a></li>
-
                 <li><a href="#">Narx statistikasi</a></li>
-
                 <li><a href="#">E'lon joylash</a></li>
-
             </ul>
-
         </div>
-
-
         <div class="footer-section">
-
             <h4>Contact</h4>
-
             <ul>
-
                 <li><i class="fa-solid fa-phone"></i><a href="tel:+998200004489">+998 20 000 44 89</a></li>
-
                 <li><i class="fa-solid fa-envelope"></i> <a href="mailto:boburnasimovich@gmail.com">boburnasimovich@gmail.com</a></li>
-
                 <li><i class="fa-solid fa-location-dot"></i> O'zbekiston</li>
-
             </ul>
-
         </div>
-
-
         <div class="footer-section">
-
             <h4>Social</h4>
-
             <div class="social">
-
                 <a target="_blank" href="https://t.me/nsmvch"><i class="fa-brands fa-telegram"></i></a>
-
                 <a target="_blank" href="https://www.instagram.com/_nsmvc"><i class="fa-brands fa-instagram"></i></a>
-
                 <a target="_blank" href="https://www.facebook.com/_nsmvc"><i class="fa-brands fa-facebook"></i></a>
             </div>
-
         </div>
-
     </div>
-
-
     <div class="footer-bottom">
-
         © 2026 Hosil.uz — Barcha huquqlar himoyalangan
-
     </div>
-
 </footer>
-
 </html>
