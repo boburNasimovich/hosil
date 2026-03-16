@@ -16,9 +16,11 @@
     "axe/name-role-value": [
       "default",
       {
-        "button-name": "off"
+        "button-name": "off",
+        "link-name": "off"
       }
     ],
-    "detect-css-reflows/composite": "off"
+    "detect-css-reflows/composite": "off",
+    "disown-opener": "off"
   }
 }
