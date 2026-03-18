@@ -54,7 +54,22 @@ alert("Ro'yxatdan o'tdingiz");
 closeModal();
 
 }
+db.collection("trucks").onSnapshot(snapshot=>{
 
+trucks = [];
+
+snapshot.forEach(doc=>{
+
+trucks.push({
+id:doc.id,
+...doc.data()
+});
+
+});
+
+showTrucks();
+
+});
 function login(){
 
 let u=document.getElementById("loginUser").value;
@@ -292,34 +307,41 @@ return phone;
 
 function addTruck(){
 
-let t={
-from:document.getElementById("from").value,
-to:document.getElementById("to").value,
-phone:document.getElementById("truckPhone").value
-};
+let from=document.getElementById("from").value;
+let to=document.getElementById("to").value;
+let phone=document.getElementById("truckPhone").value;
 
-trucks.push(t);
+if(!from || !to){
 
-localStorage.setItem("trucks",JSON.stringify(trucks));
-
-showTrucks();
+alert("Ma'lumotlarni to'ldiring");
+return;
 
 }
 
-function deleteTruck(i){
+db.collection("trucks").add({
 
-trucks.splice(i,1);
+from:from,
+to:to,
+phone:phone
 
-localStorage.setItem("trucks",JSON.stringify(trucks));
+}).then(()=>{
 
+alert("Transport qo'shildi");
+
+});
+
+}
 showTrucks();
-openAdmin();
+function deleteTruck(id){
+
+db.collection("trucks").doc(id).delete();
 
 }
 
 function showTrucks(){
 
 let c=document.getElementById("trucks");
+
 c.innerHTML="";
 
 trucks.forEach(t=>{
@@ -328,8 +350,12 @@ c.innerHTML+=`
 
 <div class="truck">
 
-<i class="fa-solid fa-truck"></i> ${t.from} → ${t.to}
-<a href="tel:${t.phone}"><i class="fa-solid fa-phone"></i> Bog'lanish</a>
+<i class="fa-solid fa-truck"></i>
+${t.from} → ${t.to}
+
+<a href="tel:${t.phone}">
+<i class="fa-solid fa-phone"></i>
+</a>
 
 </div>
 
